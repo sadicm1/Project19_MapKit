@@ -18,10 +18,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
     super.viewDidLoad()
     
     // Define instant properties of Capital class
-    let ankara = Capital(title: "Ankara", coordinate: CLLocationCoordinate2DMake(39.933, 32.86) , info: "It is the city of my student years")
-    let paris = Capital(title: "Paris", coordinate: CLLocationCoordinate2DMake(48.856614, 2.352222) , info: "It is known as the city of love")
-    let berlin = Capital(title: "Berlin", coordinate: CLLocationCoordinate2DMake(52.520007, 13.404954), info: "Once it was divided by a shame wall")
-    let minsk = Capital(title: "Minsk", coordinate: CLLocationCoordinate2DMake(53.904540, 27.561524), info: "It is known as the city of my love")
+    let ankara = Capital(title: "Ankara", coordinate: CLLocationCoordinate2DMake(39.933, 32.86) , info: "It is the city of my student years", favorite: "Yes")
+    let paris = Capital(title: "Paris", coordinate: CLLocationCoordinate2DMake(48.856614, 2.352222) , info: "It is known as the city of love", favorite: nil)
+    let berlin = Capital(title: "Berlin", coordinate: CLLocationCoordinate2DMake(52.520007, 13.404954), info: "Once it was divided by a shame wall", favorite: nil)
+    let minsk = Capital(title: "Minsk", coordinate: CLLocationCoordinate2DMake(53.904540, 27.561524), info: "It is known as the city of my love", favorite: "Yes")
     
     // Add new annotations to mapView
     mapView.addAnnotations([ankara, paris, berlin, minsk])
@@ -39,7 +39,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
     if annotation is Capital {
       
       // Try to dequeue an annotation view from map view's unused views.
-      var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+      var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
+      
       
       // If it's not able to find a reusable one, create a new one with MKPinAnnotationView
       if annotationView == nil {
@@ -53,6 +54,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let btn = UIButton(type: .detailDisclosure)
         annotationView!.rightCalloutAccessoryView = btn
         
+        // Favorite cities are green
+        let annotation = annotation as! Capital
+        if annotation.favorite != nil {
+          annotationView!.pinTintColor = .green
+        }
+
       } else {
         // If it can reuse a view update that view to use a different annotation.
         annotationView!.annotation = annotation
