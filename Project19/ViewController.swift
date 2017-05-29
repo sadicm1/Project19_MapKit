@@ -25,6 +25,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     // Add new annotations to mapView
     mapView.addAnnotations([ankara, paris, berlin, minsk])
+    
+    // Add a right bar button item to trigger a action sheet
+    // The action sheet will show map types to be selected
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(mapType))
   }
   
   func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -72,6 +76,24 @@ class ViewController: UIViewController, MKMapViewDelegate {
     ac.addAction(UIAlertAction(title: "OK", style: .default))
     present(ac, animated: true)
   }
-
+  
+  /* Function that chooses map type */
+  func mapType() {
+    let ac = UIAlertController(title: "Map Type", message: "Choose map type to be displayed", preferredStyle: .actionSheet)
+    ac.addAction(UIAlertAction(title: "Sattelite", style: .default) { [unowned self] (alert) in
+      self.mapView.mapType = .satellite
+    })
+    
+    ac.addAction(UIAlertAction(title: "Map", style: .default) { [unowned self] (alert) in
+      self.mapView.mapType = .standard
+    })
+    
+    ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    
+    present(ac, animated: true)
+  }
+  
+  
+  
 }
 
